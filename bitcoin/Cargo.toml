@@ -1,13 +1,13 @@
 [package]
-name = "bitcoin"
+name = "peercoin"
 version = "0.30.2"
 authors = ["Andrew Poelstra <apoelstra@wpsoftware.net>"]
 license = "CC0-1.0"
-repository = "https://github.com/rust-bitcoin/rust-bitcoin/"
+repository = "https://github.com/backpacker69/rust-peercoin/"
 documentation = "https://docs.rs/bitcoin/"
-description = "General purpose library for using and interoperating with Bitcoin."
+description = "General purpose library for using and interoperating with Peercoin."
 categories = ["cryptography::cryptocurrencies"]
-keywords = [ "crypto", "bitcoin" ]
+keywords = [ "crypto", "peercoin" ]
 readme = "../README.md"
 edition = "2018"
 exclude = ["tests", "contrib"]
