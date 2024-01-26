@@ -1,10 +1,10 @@
 // Written in 2014 by Andrew Poelstra <apoelstra@wpsoftware.net>
 // SPDX-License-Identifier: CC0-1.0
 
-//! Bitcoin network messages.
+//! Peercoin network messages.
 //!
 //! This module defines the `NetworkMessage` and `RawNetworkMessage` types that
-//! are used for (de)serializing Bitcoin objects for transmission on the network.
+//! are used for (de)serializing Peercoin objects for transmission on the network.
 //!
 
 use core::convert::TryFrom;
@@ -676,8 +676,8 @@ mod test {
     #[test]
     #[rustfmt::skip]
     fn serialize_verack_test() {
-        assert_eq!(serialize(&RawNetworkMessage { magic: Magic::from(Network::Bitcoin), payload: NetworkMessage::Verack }),
-                   vec![0xf9, 0xbe, 0xb4, 0xd9, 0x76, 0x65, 0x72, 0x61,
+        assert_eq!(serialize(&RawNetworkMessage { magic: Magic::from(Network::Peercoin), payload: NetworkMessage::Verack }),
+                   vec![0xe6, 0xe8, 0xe9, 0xe5, 0x76, 0x65, 0x72, 0x61,
                         0x63, 0x6B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                         0x00, 0x00, 0x00, 0x00, 0x5d, 0xf6, 0xe0, 0xe2]);
     }
@@ -685,8 +685,8 @@ mod test {
     #[test]
     #[rustfmt::skip]
     fn serialize_ping_test() {
-        assert_eq!(serialize(&RawNetworkMessage { magic: Magic::from(Network::Bitcoin), payload: NetworkMessage::Ping(100) }),
-                   vec![0xf9, 0xbe, 0xb4, 0xd9, 0x70, 0x69, 0x6e, 0x67,
+        assert_eq!(serialize(&RawNetworkMessage { magic: Magic::from(Network::Peercoin), payload: NetworkMessage::Ping(100) }),
+                   vec![0xe6, 0xe8, 0xe9, 0xe5, 0x70, 0x69, 0x6e, 0x67,
                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                         0x08, 0x00, 0x00, 0x00, 0x24, 0x67, 0xf1, 0x1d,
                         0x64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
@@ -695,8 +695,8 @@ mod test {
     #[test]
     #[rustfmt::skip]
     fn serialize_mempool_test() {
-        assert_eq!(serialize(&RawNetworkMessage { magic: Magic::from(Network::Bitcoin), payload: NetworkMessage::MemPool }),
-                   vec![0xf9, 0xbe, 0xb4, 0xd9, 0x6d, 0x65, 0x6d, 0x70,
+        assert_eq!(serialize(&RawNetworkMessage { magic: Magic::from(Network::Peercoin), payload: NetworkMessage::MemPool }),
+                   vec![0xe6, 0xe8, 0xe9, 0xe5, 0x6d, 0x65, 0x6d, 0x70,
                         0x6f, 0x6f, 0x6c, 0x00, 0x00, 0x00, 0x00, 0x00,
                         0x00, 0x00, 0x00, 0x00, 0x5d, 0xf6, 0xe0, 0xe2]);
     }
@@ -704,8 +704,8 @@ mod test {
     #[test]
     #[rustfmt::skip]
     fn serialize_getaddr_test() {
-        assert_eq!(serialize(&RawNetworkMessage { magic: Magic::from(Network::Bitcoin), payload: NetworkMessage::GetAddr }),
-                   vec![0xf9, 0xbe, 0xb4, 0xd9, 0x67, 0x65, 0x74, 0x61,
+        assert_eq!(serialize(&RawNetworkMessage { magic: Magic::from(Network::Peercoin), payload: NetworkMessage::GetAddr }),
+                   vec![0xe6, 0xe8, 0xe9, 0xe5, 0x67, 0x65, 0x74, 0x61,
                         0x64, 0x64, 0x72, 0x00, 0x00, 0x00, 0x00, 0x00,
                         0x00, 0x00, 0x00, 0x00, 0x5d, 0xf6, 0xe0, 0xe2]);
     }
@@ -714,12 +714,12 @@ mod test {
     fn deserialize_getaddr_test() {
         #[rustfmt::skip]
         let msg = deserialize(&[
-            0xf9, 0xbe, 0xb4, 0xd9, 0x67, 0x65, 0x74, 0x61,
+            0xe6, 0xe8, 0xe9, 0xe5, 0x67, 0x65, 0x74, 0x61,
             0x64, 0x64, 0x72, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x5d, 0xf6, 0xe0, 0xe2
         ]);
         let preimage = RawNetworkMessage {
-            magic: Magic::from(Network::Bitcoin),
+            magic: Magic::from(Network::Peercoin),
             payload: NetworkMessage::GetAddr,
         };
         assert!(msg.is_ok());
@@ -732,7 +732,7 @@ mod test {
     fn deserialize_version_test() {
         #[rustfmt::skip]
         let msg = deserialize::<RawNetworkMessage>(&[
-            0xf9, 0xbe, 0xb4, 0xd9, 0x76, 0x65, 0x72, 0x73,
+            0xe6, 0xe8, 0xe9, 0xe5, 0x76, 0x65, 0x72, 0x73,
             0x69, 0x6f, 0x6e, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x66, 0x00, 0x00, 0x00, 0xbe, 0x61, 0xb8, 0x27,
             0x7f, 0x11, 0x01, 0x00, 0x0d, 0x04, 0x00, 0x00,
@@ -752,7 +752,7 @@ mod test {
 
         assert!(msg.is_ok());
         let msg = msg.unwrap();
-        assert_eq!(msg.magic, Magic::from(Network::Bitcoin));
+        assert_eq!(msg.magic, Magic::from(Network::Peercoin));
         if let NetworkMessage::Version(version_msg) = msg.payload {
             assert_eq!(version_msg.version, 70015);
             assert_eq!(
@@ -776,7 +776,7 @@ mod test {
     fn deserialize_partial_message_test() {
         #[rustfmt::skip]
         let data = [
-            0xf9, 0xbe, 0xb4, 0xd9, 0x76, 0x65, 0x72, 0x73,
+            0xe6, 0xe8, 0xe9, 0xe5, 0x76, 0x65, 0x72, 0x73,
             0x69, 0x6f, 0x6e, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x66, 0x00, 0x00, 0x00, 0xbe, 0x61, 0xb8, 0x27,
             0x7f, 0x11, 0x01, 0x00, 0x0d, 0x04, 0x00, 0x00,
@@ -798,7 +798,7 @@ mod test {
 
         let (msg, consumed) = msg.unwrap();
         assert_eq!(consumed, data.to_vec().len() - 2);
-        assert_eq!(msg.magic, Magic::from(Network::Bitcoin));
+        assert_eq!(msg.magic, Magic::from(Network::Peercoin));
         if let NetworkMessage::Version(version_msg) = msg.payload {
             assert_eq!(version_msg.version, 70015);
             assert_eq!(

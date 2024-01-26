@@ -27,17 +27,17 @@ use std::convert::TryFrom;
 use std::str::FromStr;
 
 use bincode::serialize;
-use bitcoin::bip32::{ChildNumber, ExtendedPrivKey, ExtendedPubKey, KeySource};
-use bitcoin::blockdata::locktime::{absolute, relative};
-use bitcoin::blockdata::witness::Witness;
-use bitcoin::consensus::encode::deserialize;
-use bitcoin::hashes::hex::FromHex;
-use bitcoin::hashes::{hash160, ripemd160, sha256, sha256d, Hash};
-use bitcoin::psbt::raw::{self, Key, Pair, ProprietaryKey};
-use bitcoin::psbt::{Input, Output, Psbt, PsbtSighashType};
-use bitcoin::sighash::{EcdsaSighashType, TapSighashType};
-use bitcoin::taproot::{self, ControlBlock, LeafVersion, TapTree, TaprootBuilder};
-use bitcoin::{
+use peercoin::bip32::{ChildNumber, ExtendedPrivKey, ExtendedPubKey, KeySource};
+use peercoin::blockdata::locktime::{absolute, relative};
+use peercoin::blockdata::witness::Witness;
+use peercoin::consensus::encode::deserialize;
+use peercoin::hashes::hex::FromHex;
+use peercoin::hashes::{hash160, ripemd160, sha256, sha256d, Hash};
+use peercoin::psbt::raw::{self, Key, Pair, ProprietaryKey};
+use peercoin::psbt::{Input, Output, Psbt, PsbtSighashType};
+use peercoin::sighash::{EcdsaSighashType, TapSighashType};
+use peercoin::taproot::{self, ControlBlock, LeafVersion, TapTree, TaprootBuilder};
+use peercoin::{
     ecdsa, Address, Block, Network, OutPoint, PrivateKey, PublicKey, ScriptBuf, Sequence, Target,
     Transaction, TxIn, TxOut, Txid, Work,
 };

@@ -1,9 +1,9 @@
 // Written in 2014 by Andrew Poelstra <apoelstra@wpsoftware.net>
 // SPDX-License-Identifier: CC0-1.0
 
-//! Bitcoin network constants.
+//! Peercoin network constants.
 //!
-//! This module provides various constants relating to the Bitcoin network
+//! This module provides various constants relating to the Peercoin network
 //! protocol, such as protocol versioning and magic header bytes.
 //!
 //! The [`Network`][1] type implements the [`Decodable`][2] and
@@ -17,10 +17,10 @@
 //! # Example: encoding a network's magic bytes
 //!
 //! ```rust
-//! use bitcoin::network::constants::Network;
-//! use bitcoin::consensus::encode::serialize;
+//! use peercoin::network::constants::Network;
+//! use peercoin::consensus::encode::serialize;
 //!
-//! let network = Network::Bitcoin;
+//! let network = Network::Peercoin;
 //! let bytes = serialize(&network.magic());
 //!
 //! assert_eq!(&bytes[..], &[0xF9, 0xBE, 0xB4, 0xD9]);
@@ -67,13 +67,13 @@ pub const PROTOCOL_VERSION: u32 = 70001;
 #[cfg_attr(feature = "serde", serde(rename_all = "lowercase"))]
 #[non_exhaustive]
 pub enum Network {
-    /// Mainnet Bitcoin.
-    Bitcoin,
-    /// Bitcoin's testnet network.
+    /// Mainnet Peercoin.
+    Peercoin,
+    /// Peercoin's testnet network.
     Testnet,
-    /// Bitcoin's signet network.
+    /// Peercoin's signet network.
     Signet,
-    /// Bitcoin's regtest network.
+    /// Peercoin's regtest network.
     Regtest,
 }
 
@@ -83,10 +83,10 @@ impl Network {
     /// # Examples
     ///
     /// ```rust
-    /// use bitcoin::network::constants::{Network, Magic};
+    /// use peercoin::network::constants::{Network, Magic};
     /// use std::convert::TryFrom;
     ///
-    /// assert_eq!(Ok(Network::Bitcoin), Network::try_from(Magic::from_bytes([0xF9, 0xBE, 0xB4, 0xD9])));
+    /// assert_eq!(Ok(Network::Peercoin), Network::try_from(Magic::from_bytes([0xF9, 0xBE, 0xB4, 0xD9])));
     /// assert_eq!(None, Network::from_magic(Magic::from_bytes([0xFF, 0xFF, 0xFF, 0xFF])));
     /// ```
     pub fn from_magic(magic: Magic) -> Option<Network> { Network::try_from(magic).ok() }
@@ -97,9 +97,9 @@ impl Network {
     /// # Examples
     ///
     /// ```rust
-    /// use bitcoin::network::constants::{Network, Magic};
+    /// use peercoin::network::constants::{Network, Magic};
     ///
-    /// let network = Network::Bitcoin;
+    /// let network = Network::Peercoin;
     /// assert_eq!(network.magic(), Magic::from_bytes([0xF9, 0xBE, 0xB4, 0xD9]));
     /// ```
     pub fn magic(self) -> Magic { Magic::from(self) }
@@ -115,7 +115,7 @@ impl Network {
     /// ```
     pub fn to_core_arg(self) -> &'static str {
         match self {
-            Network::Bitcoin => "main",
+            Network::Peercoin => "main",
             Network::Testnet => "test",
             Network::Signet => "signet",
             Network::Regtest => "regtest",
@@ -135,7 +135,7 @@ impl Network {
         use Network::*;
 
         let network = match core_arg {
-            "main" => Bitcoin,
+            "main" => Peercoin,
             "test" => Testnet,
             "signet" => Signet,
             "regtest" => Regtest,
@@ -149,10 +149,10 @@ impl Network {
     /// # Examples
     ///
     /// ```rust
-    /// use bitcoin::network::constants::Network;
-    /// use bitcoin::blockdata::constants::ChainHash;
+    /// use peercoin::network::constants::Network;
+    /// use peercoin::blockdata::constants::ChainHash;
     ///
-    /// let network = Network::Bitcoin;
+    /// let network = Network::Peercoin;
     /// assert_eq!(network.chain_hash(), ChainHash::BITCOIN);
     /// ```
     pub fn chain_hash(self) -> ChainHash { ChainHash::using_genesis_block(self) }
@@ -162,11 +162,11 @@ impl Network {
     /// # Examples
     ///
     /// ```rust
-    /// use bitcoin::network::constants::Network;
-    /// use bitcoin::blockdata::constants::ChainHash;
+    /// use peercoin::network::constants::Network;
+    /// use peercoin::blockdata::constants::ChainHash;
     /// use std::convert::TryFrom;
     ///
-    /// assert_eq!(Ok(Network::Bitcoin), Network::try_from(ChainHash::BITCOIN));
+    /// assert_eq!(Ok(Network::Peercoin), Network::try_from(ChainHash::PEERCOIN));
     /// ```
     pub fn from_chain_hash(chain_hash: ChainHash) -> Option<Network> {
         Network::try_from(chain_hash).ok()
@@ -192,7 +192,7 @@ impl FromStr for Network {
         use Network::*;
 
         let network = match s {
-            "bitcoin" => Bitcoin,
+            "peercoin" => Peercoin,
             "testnet" => Testnet,
             "signet" => Signet,
             "regtest" => Regtest,
@@ -207,7 +207,7 @@ impl fmt::Display for Network {
         use Network::*;
 
         let s = match *self {
-            Bitcoin => "bitcoin",
+            Peercoin => "peercoin",
             Testnet => "testnet",
             Signet => "signet",
             Regtest => "regtest",
@@ -234,7 +234,7 @@ impl TryFrom<ChainHash> for Network {
     fn try_from(chain_hash: ChainHash) -> Result<Self, Self::Error> {
         match chain_hash {
             // Note: any new network entries must be matched against here.
-            ChainHash::BITCOIN => Ok(Network::Bitcoin),
+            ChainHash::PEERCOIN => Ok(Network::Peercoin),
             ChainHash::TESTNET => Ok(Network::Testnet),
             ChainHash::SIGNET => Ok(Network::Signet),
             ChainHash::REGTEST => Ok(Network::Regtest),
@@ -248,14 +248,14 @@ impl TryFrom<ChainHash> for Network {
 pub struct Magic([u8; 4]);
 
 impl Magic {
-    /// Bitcoin mainnet network magic bytes.
-    pub const BITCOIN: Self = Self([0xF9, 0xBE, 0xB4, 0xD9]);
-    /// Bitcoin testnet network magic bytes.
-    pub const TESTNET: Self = Self([0x0B, 0x11, 0x09, 0x07]);
-    /// Bitcoin signet network magic bytes.
+    /// Peercoin mainnet network magic bytes.
+    pub const PEERCOIN: Self = Self([0xE6, 0xE8, 0xE9, 0xE5]);
+    /// Peercoin testnet network magic bytes.
+    pub const TESTNET: Self = Self([0xCB, 0xF2, 0xC0, 0xEF]);
+    /// Peercoin signet network magic bytes.
     pub const SIGNET: Self = Self([0x0A, 0x03, 0xCF, 0x40]);
-    /// Bitcoin regtest network magic bytes.
-    pub const REGTEST: Self = Self([0xFA, 0xBF, 0xB5, 0xDA]);
+    /// Peercoin regtest network magic bytes.
+    pub const REGTEST: Self = Self([0xCB, 0xF2, 0xC0, 0xEF]);
 
     /// Create network magic from bytes.
     pub fn from_bytes(bytes: [u8; 4]) -> Magic { Magic(bytes) }
@@ -288,7 +288,7 @@ impl From<Network> for Magic {
     fn from(network: Network) -> Magic {
         match network {
             // Note: new network entries must explicitly be matched in `try_from` below.
-            Network::Bitcoin => Magic::BITCOIN,
+            Network::Peercoin => Magic::PEERCOIN,
             Network::Testnet => Magic::TESTNET,
             Network::Signet => Magic::SIGNET,
             Network::Regtest => Magic::REGTEST,
@@ -306,7 +306,7 @@ impl TryFrom<Magic> for Network {
     fn try_from(magic: Magic) -> Result<Self, Self::Error> {
         match magic {
             // Note: any new network entries must be matched against here.
-            Magic::BITCOIN => Ok(Network::Bitcoin),
+            Magic::PEERCOIN => Ok(Network::Peercoin),
             Magic::TESTNET => Ok(Network::Testnet),
             Magic::SIGNET => Ok(Network::Signet),
             Magic::REGTEST => Ok(Network::Regtest),
@@ -404,17 +404,17 @@ impl ServiceFlags {
     pub const NONE: ServiceFlags = ServiceFlags(0);
 
     /// NETWORK means that the node is capable of serving the complete block chain. It is currently
-    /// set by all Bitcoin Core non pruned nodes, and is unset by SPV clients or other light
+    /// set by all Peercoin non pruned nodes, and is unset by SPV clients or other light
     /// clients.
     pub const NETWORK: ServiceFlags = ServiceFlags(1 << 0);
 
-    /// GETUTXO means the node is capable of responding to the getutxo protocol request.  Bitcoin
-    /// Core does not support this but a patch set called Bitcoin XT does.
+    /// GETUTXO means the node is capable of responding to the getutxo protocol request.
+    /// Peercoin does not support this but a patch set called Bitcoin XT does.
     /// See BIP 64 for details on how this is implemented.
     pub const GETUTXO: ServiceFlags = ServiceFlags(1 << 1);
 
-    /// BLOOM means the node is capable and willing to handle bloom-filtered connections.  Bitcoin
-    /// Core nodes used to support this by default, without advertising this bit, but no longer do
+    /// BLOOM means the node is capable and willing to handle bloom-filtered connections. Peercoin
+    /// nodes used to support this by default, without advertising this bit, but no longer do
     /// as of protocol version 70011 (= NO_BLOOM_VERSION)
     pub const BLOOM: ServiceFlags = ServiceFlags(1 << 2);
 
@@ -553,25 +553,25 @@ mod tests {
 
     #[test]
     fn serialize_test() {
-        assert_eq!(serialize(&Network::Bitcoin.magic()), &[0xf9, 0xbe, 0xb4, 0xd9]);
-        assert_eq!(serialize(&Network::Testnet.magic()), &[0x0b, 0x11, 0x09, 0x07]);
+        assert_eq!(serialize(&Network::Peercoin.magic()), &[0xe6, 0xe8, 0xe9, 0xe5]);
+        assert_eq!(serialize(&Network::Testnet.magic()), &[0xcb, 0xf2, 0xc0, 0xef]);
         assert_eq!(serialize(&Network::Signet.magic()), &[0x0a, 0x03, 0xcf, 0x40]);
-        assert_eq!(serialize(&Network::Regtest.magic()), &[0xfa, 0xbf, 0xb5, 0xda]);
+        assert_eq!(serialize(&Network::Regtest.magic()), &[0xcb, 0xf2, 0xc0, 0xef]);
 
-        assert_eq!(deserialize(&[0xf9, 0xbe, 0xb4, 0xd9]).ok(), Some(Network::Bitcoin.magic()));
-        assert_eq!(deserialize(&[0x0b, 0x11, 0x09, 0x07]).ok(), Some(Network::Testnet.magic()));
+        assert_eq!(deserialize(&[0xe6, 0xe8, 0xe9, 0xe5]).ok(), Some(Network::Peercoin.magic()));
+        assert_eq!(deserialize(&[0xcb, 0xf2, 0xc0, 0xef]).ok(), Some(Network::Testnet.magic()));
         assert_eq!(deserialize(&[0x0a, 0x03, 0xcf, 0x40]).ok(), Some(Network::Signet.magic()));
-        assert_eq!(deserialize(&[0xfa, 0xbf, 0xb5, 0xda]).ok(), Some(Network::Regtest.magic()));
+        assert_eq!(deserialize(&[0xcb, 0xf2, 0xc0, 0xef]).ok(), Some(Network::Regtest.magic()));
     }
 
     #[test]
     fn string_test() {
-        assert_eq!(Network::Bitcoin.to_string(), "bitcoin");
+        assert_eq!(Network::Peercoin.to_string(), "peercoin");
         assert_eq!(Network::Testnet.to_string(), "testnet");
         assert_eq!(Network::Regtest.to_string(), "regtest");
         assert_eq!(Network::Signet.to_string(), "signet");
 
-        assert_eq!("bitcoin".parse::<Network>().unwrap(), Network::Bitcoin);
+        assert_eq!("peercoin".parse::<Network>().unwrap(), Network::Peercoin);
         assert_eq!("testnet".parse::<Network>().unwrap(), Network::Testnet);
         assert_eq!("regtest".parse::<Network>().unwrap(), Network::Regtest);
         assert_eq!("signet".parse::<Network>().unwrap(), Network::Signet);
@@ -623,7 +623,7 @@ mod tests {
     fn serde_roundtrip() {
         use Network::*;
         let tests = vec![
-            (Bitcoin, "bitcoin"),
+            (Peercoin, "peercoin"),
             (Testnet, "testnet"),
             (Signet, "signet"),
             (Regtest, "regtest"),
@@ -644,9 +644,8 @@ mod tests {
     #[test]
     fn magic_from_str() {
         let known_network_magic_strs = [
-            ("f9beb4d9", Network::Bitcoin),
-            ("0b110907", Network::Testnet),
-            ("fabfb5da", Network::Regtest),
+            ("e6e8e9e5", Network::Peercoin),
+            ("cbf2c0ef", Network::Testnet),
             ("0a03cf40", Network::Signet),
         ];
 
@@ -660,7 +659,7 @@ mod tests {
     #[test]
     fn from_to_core_arg() {
         let expected_pairs = [
-            (Network::Bitcoin, "main"),
+            (Network::Peercoin, "main"),
             (Network::Testnet, "test"),
             (Network::Regtest, "regtest"),
             (Network::Signet, "signet"),

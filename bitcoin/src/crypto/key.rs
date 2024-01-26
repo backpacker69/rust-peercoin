@@ -1,9 +1,9 @@
 // Written in 2014 by Andrew Poelstra <apoelstra@wpsoftware.net>
 // SPDX-License-Identifier: CC0-1.0
 
-//! Bitcoin keys.
+//! Peercoin keys.
 //!
-//! This module provides keys used in Bitcoin that can be roundtrip
+//! This module provides keys used in Peercoin that can be roundtrip
 //! (de)serialized.
 
 use crate::prelude::*;
@@ -86,7 +86,7 @@ impl From<hex::Error> for Error {
 }
 
 
-/// A Bitcoin ECDSA public key
+/// A Peercoin ECDSA public key
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct PublicKey {
     /// Whether this public key should be serialized as compressed
@@ -121,12 +121,12 @@ impl PublicKey {
         }
     }
 
-    /// Returns bitcoin 160-bit hash of the public key
+    /// Returns peercoin 160-bit hash of the public key
     pub fn pubkey_hash(&self) -> PubkeyHash {
         self.with_serialized(PubkeyHash::hash)
     }
 
-    /// Returns bitcoin 160-bit hash of the public key for witness program
+    /// Returns peercoin 160-bit hash of the public key for witness program
     pub fn wpubkey_hash(&self) -> Option<WPubkeyHash> {
         if self.compressed {
             Some(WPubkeyHash::from_byte_array(
@@ -185,7 +185,7 @@ impl PublicKey {
     /// `sort_by_key`, or any of the other `*_by_key` methods on slice.
     /// Pass the method into the sort method directly. (ie. `PublicKey::to_sort_key`)
     ///
-    /// This method of sorting is in line with Bitcoin Core's implementation of
+    /// This method of sorting is in line with Peercoin's implementation of
     /// sorting keys for output descriptors such as `sortedmulti()`.
     ///
     /// If every `PublicKey` in the slice is `compressed == true` then this will sort
@@ -197,7 +197,7 @@ impl PublicKey {
     ///
     /// ```rust
     /// use std::str::FromStr;
-    /// use bitcoin::PublicKey;
+    /// use peercoin::PublicKey;
     ///
     /// let pk = |s| PublicKey::from_str(s).unwrap();
     ///
@@ -218,7 +218,7 @@ impl PublicKey {
     ///     pk("032b8324c93575034047a52e9bca05a46d8347046b91a032eff07d5de8d3f2730b"),
     ///     pk("038f47dcd43ba6d97fc9ed2e3bba09b175a45fac55f0683e8cf771e8ced4572354"),
     ///     // Uncompressed keys are not BIP67 compliant, but are sorted
-    ///     // after compressed keys in Bitcoin Core using `sortedmulti()`
+    ///     // after compressed keys in Peercoin using `sortedmulti()`
     ///     pk("045d753414fa292ea5b8f56e39cfb6a0287b2546231a5cb05c4b14ab4b463d171f5128148985b23eccb1e2905374873b1f09b9487f47afa6b1f2b0083ac8b4f7e8"),
     ///     pk("04c4b0bbb339aa236bff38dbe6a451e111972a7909a126bc424013cba2ec33bc3816753d96001fd7cba3ce5372f5c9a0d63708183033538d07b1e532fc43aaacfa"),
     ///     pk("04c4b0bbb339aa236bff38dbe6a451e111972a7909a126bc424013cba2ec33bc38e98ac269ffe028345c31ac8d0a365f29c8f7e7cfccac72f84e1acd02bc554f35"),
@@ -304,7 +304,7 @@ impl From<PublicKey> for PubkeyHash {
     }
 }
 
-/// A Bitcoin ECDSA private key
+/// A Peercoin ECDSA private key
 #[derive(Copy, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "std", derive(Debug))]
 pub struct PrivateKey {
@@ -359,7 +359,7 @@ impl PrivateKey {
     pub fn fmt_wif(&self, fmt: &mut dyn fmt::Write) -> fmt::Result {
         let mut ret = [0; 34];
         ret[0] = match self.network {
-            Network::Bitcoin => 128,
+            Network::Peercoin => 183,
             Network::Testnet | Network::Signet | Network::Regtest => 239,
         };
         ret[1..33].copy_from_slice(&self.inner[..]);
@@ -393,7 +393,7 @@ impl PrivateKey {
         };
 
         let network = match data[0] {
-            128 => Network::Bitcoin,
+            183 => Network::Peercoin,
             239 => Network::Testnet,
             x   => {
                 return Err(Error::Base58(base58::Error::InvalidAddressVersion(x)));
@@ -578,8 +578,8 @@ pub type UntweakedKeyPair = KeyPair;
 /// # Examples
 /// ```
 /// # #[cfg(feature = "rand-std")] {
-/// # use bitcoin::key::{KeyPair, TweakedKeyPair, TweakedPublicKey};
-/// # use bitcoin::secp256k1::{rand, Secp256k1};
+/// # use peercoin::key::{KeyPair, TweakedKeyPair, TweakedPublicKey};
+/// # use peercoin::secp256k1::{rand, Secp256k1};
 /// # let secp = Secp256k1::new();
 /// # let keypair = TweakedKeyPair::dangerous_assume_tweaked(KeyPair::new(&secp, &mut rand::thread_rng()));
 /// // There are various conversion methods available to get a tweaked pubkey from a tweaked keypair.
@@ -769,7 +769,7 @@ mod tests {
     use crate::hashes::hex::FromHex;
     use crate::io;
     use crate::network::constants::Network::Testnet;
-    use crate::network::constants::Network::Bitcoin;
+    use crate::network::constants::Network::Peercoin;
 
     #[test]
     fn test_key_derivation() {
@@ -790,21 +790,21 @@ mod tests {
         assert_eq!(&sk.to_wif(), &sk_str.to_wif());
 
         // mainnet uncompressed
-        let sk = PrivateKey::from_wif("5JYkZjmN7PVMjJUfJWfRFwtuXTGB439XV6faajeHPAM9Z2PT2R3").unwrap();
-        assert_eq!(sk.network, Bitcoin);
+        let sk = PrivateKey::from_wif("79aKFv9nkMide2Y2SWDRBy7ENKspAWjwovNoyZSBbjArBBHAM1i").unwrap();
+        assert_eq!(sk.network, Peercoin);
         assert!(!sk.compressed);
-        assert_eq!(&sk.to_wif(), "5JYkZjmN7PVMjJUfJWfRFwtuXTGB439XV6faajeHPAM9Z2PT2R3");
+        assert_eq!(&sk.to_wif(), "79aKFv9nkMide2Y2SWDRBy7ENKspAWjwovNoyZSBbjArBBHAM1i");
 
         let secp = Secp256k1::new();
         let mut pk = sk.public_key(&secp);
         assert!(!pk.compressed);
-        assert_eq!(&pk.to_string(), "042e58afe51f9ed8ad3cc7897f634d881fdbe49a81564629ded8156bebd2ffd1af191923a2964c177f5b5923ae500fca49e99492d534aa3759d6b25a8bc971b133");
-        assert_eq!(pk, PublicKey::from_str("042e58afe51f9ed8ad3cc7897f634d881fdbe49a81564629ded8156bebd2ffd1af191923a2964c177f5b5923ae500fca49e99492d534aa3759d6b25a8bc971b133").unwrap());
+        assert_eq!(&pk.to_string(), "0456072ffd712d5c6fa12fcd239c35c053771c981552f66369ccaa729606a5561ae10f7688cab92db6ddd7e4060009e611e8ec1eb530a1deae757f4c9de0a4c0b4");
+        assert_eq!(pk, PublicKey::from_str("0456072ffd712d5c6fa12fcd239c35c053771c981552f66369ccaa729606a5561ae10f7688cab92db6ddd7e4060009e611e8ec1eb530a1deae757f4c9de0a4c0b4").unwrap());
         let addr = Address::p2pkh(&pk, sk.network);
-        assert_eq!(&addr.to_string(), "1GhQvF6dL8xa6wBxLnWmHcQsurx9RxiMc8");
+        assert_eq!(&addr.to_string(), "PSPMUL3yCmMqgD7wuWS7uX3k4r7ebje4AS");
         pk.compressed = true;
-        assert_eq!(&pk.to_string(), "032e58afe51f9ed8ad3cc7897f634d881fdbe49a81564629ded8156bebd2ffd1af");
-        assert_eq!(pk, PublicKey::from_str("032e58afe51f9ed8ad3cc7897f634d881fdbe49a81564629ded8156bebd2ffd1af").unwrap());
+        assert_eq!(&pk.to_string(), "0256072ffd712d5c6fa12fcd239c35c053771c981552f66369ccaa729606a5561a");
+        assert_eq!(pk, PublicKey::from_str("0256072ffd712d5c6fa12fcd239c35c053771c981552f66369ccaa729606a5561a").unwrap());
     }
 
     #[test]

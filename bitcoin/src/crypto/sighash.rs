@@ -425,7 +425,7 @@ impl EcdsaSighashType {
     pub fn from_consensus(n: u32) -> EcdsaSighashType {
         use EcdsaSighashType::*;
 
-        // In Bitcoin Core, the SignatureHash function will mask the (int32) value with
+        // In Peercoin, the SignatureHash function will mask the (int32) value with
         // 0x1f to (apparently) deactivate ACP when checking for SINGLE and NONE bits.
         // We however want to be matching also against on ACP-masked ALL, SINGLE, and NONE.
         // So here we re-activate ACP.
@@ -519,7 +519,7 @@ impl TapSighashType {
 }
 
 /// This type is consensus valid but an input including it would prevent the transaction from
-/// being relayed on today's Bitcoin network.
+/// being relayed on today's Peercoin network.
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct NonStandardSighashType(pub u32);
 
@@ -886,6 +886,7 @@ impl<R: Borrow<Transaction>> SighashCache<R> {
             // Build tx to sign
             let mut tx = Transaction {
                 version: self_.version,
+                timestamp: self_.timestamp,
                 lock_time: self_.lock_time,
                 input: vec![],
                 output: vec![],
@@ -1065,7 +1066,7 @@ impl<R: BorrowMut<Transaction>> SighashCache<R> {
     /// use bitcoin::{absolute, Transaction, Script};
     /// use bitcoin::sighash::{EcdsaSighashType, SighashCache};
     ///
-    /// let mut tx_to_sign = Transaction { version: 2, lock_time: absolute::LockTime::ZERO, input: Vec::new(), output: Vec::new() };
+    /// let mut tx_to_sign = Transaction { version: 2, timestamp: 0, lock_time: absolute::LockTime::ZERO, input: Vec::new(), output: Vec::new() };
     /// let input_count = tx_to_sign.input.len();
     ///
     /// let mut sig_hasher = SighashCache::new(&mut tx_to_sign);
@@ -1139,6 +1140,7 @@ mod tests {
         // We need a tx with more inputs than outputs.
         let tx = Transaction {
             version: 1,
+            timestamp: 0,
             lock_time: absolute::LockTime::ZERO,
             input: vec![TxIn::default(), TxIn::default()],
             output: vec![TxOut::default()],
@@ -1207,7 +1209,7 @@ mod tests {
 
     #[test]
     fn test_sighashes_keyspending() {
-        // following test case has been taken from Bitcoin Core test framework
+        // following test case has been taken from Peercoin test framework
 
         test_taproot_sighash(
             "020000000164eb050a5e3da0c2a65e4786f26d753b7bc69691fabccafb11f7acef36641f1846010000003101b2b404392a22000000000017a9147f2bde86fe78bf68a0544a4f290e12f0b7e0a08c87580200000000000017a91425d11723074ecfb96a0a83c3956bfaf362ae0c908758020000000000001600147e20f938993641de67bb0cdd71682aa34c4d29ad5802000000000000160014c64984dc8761acfa99418bd6bedc79b9287d652d72000000",
@@ -1327,6 +1329,7 @@ mod tests {
     fn test_sighash_errors() {
         let dumb_tx = Transaction {
             version: 0,
+            timestamp: 0,
             lock_time: absolute::LockTime::ZERO,
             input: vec![TxIn::default()],
             output: vec![],
@@ -1669,7 +1672,7 @@ mod tests {
 
     fn p2pkh_hex(pk: &str) -> ScriptBuf {
         let pk: PublicKey = PublicKey::from_str(pk).unwrap();
-        Address::p2pkh(&pk, Network::Bitcoin).script_pubkey()
+        Address::p2pkh(&pk, Network::Peercoin).script_pubkey()
     }
 
     #[test]

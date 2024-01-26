@@ -1,7 +1,7 @@
 // Written in 2014 by Andrew Poelstra <apoelstra@wpsoftware.net>
 // SPDX-License-Identifier: CC0-1.0
 
-//! Bitcoin network-related network messages.
+//! Peercoin network-related network messages.
 //!
 //! This module defines network messages which describe peers and their
 //! capabilities.

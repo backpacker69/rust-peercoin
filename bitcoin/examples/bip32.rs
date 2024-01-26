@@ -1,14 +1,14 @@
-extern crate bitcoin;
+extern crate peercoin;
 
 use std::str::FromStr;
 use std::{env, process};
 
-use bitcoin::address::Address;
-use bitcoin::bip32::{ChildNumber, DerivationPath, ExtendedPrivKey, ExtendedPubKey};
-use bitcoin::hashes::hex::FromHex;
-use bitcoin::secp256k1::ffi::types::AlignedType;
-use bitcoin::secp256k1::Secp256k1;
-use bitcoin::PublicKey;
+use peercoin::address::Address;
+use peercoin::bip32::{ChildNumber, DerivationPath, ExtendedPrivKey, ExtendedPubKey};
+use peercoin::hashes::hex::FromHex;
+use peercoin::secp256k1::ffi::types::AlignedType;
+use peercoin::secp256k1::Secp256k1;
+use peercoin::PublicKey;
 
 fn main() {
     // This example derives root xprv from a 32-byte seed,
@@ -28,7 +28,7 @@ fn main() {
     println!("Seed: {}", seed_hex);
 
     // default network as mainnet
-    let network = bitcoin::Network::Bitcoin;
+    let network = peercoin::Network::Peercoin;
     println!("Network: {:?}", network);
 
     let seed = Vec::from_hex(seed_hex).unwrap();

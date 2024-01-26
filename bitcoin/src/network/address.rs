@@ -1,10 +1,10 @@
 // Written in 2014 by Andrew Poelstra <apoelstra@wpsoftware.net>
 // SPDX-License-Identifier: CC0-1.0
 
-//! Bitcoin network addresses.
+//! Peercoin network addresses.
 //!
 //! This module defines the structures and functions needed to encode
-//! network addresses in Bitcoin messages.
+//! network addresses in Peercoin messages.
 //!
 
 use core::{fmt, iter};
@@ -15,7 +15,7 @@ use crate::io;
 use crate::network::constants::ServiceFlags;
 use crate::prelude::*;
 
-/// A message which can be sent on the Bitcoin network
+/// A message which can be sent on the Peercoin network
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub struct Address {
     /// Services provided by the peer whose address this is
@@ -319,11 +319,11 @@ mod test {
             serialize(&Address {
                 services: ServiceFlags::NETWORK,
                 address: [0, 0, 0, 0, 0, 0xffff, 0x0a00, 0x0001],
-                port: 8333
+                port: 9901
             }),
             vec![
                 1u8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0x0a, 0, 0, 1,
-                0x20, 0x8d
+                0x26, 0xad
             ]
         );
     }
@@ -335,18 +335,18 @@ mod test {
             format!("The address is: {:?}", Address {
                 services: flags.add(ServiceFlags::WITNESS),
                 address: [0, 0, 0, 0, 0, 0xffff, 0x0a00, 0x0001],
-                port: 8333
+                port: 9901
             }),
-            "The address is: Address {services: ServiceFlags(NETWORK|WITNESS), address: 10.0.0.1, port: 8333}"
+            "The address is: Address {services: ServiceFlags(NETWORK|WITNESS), address: 10.0.0.1, port: 9901}"
         );
 
         assert_eq!(
             format!("The address is: {:?}", Address {
                 services: ServiceFlags::NETWORK_LIMITED,
                 address: [0xFD87, 0xD87E, 0xEB43, 0, 0, 0xffff, 0x0a00, 0x0001],
-                port: 8333
+                port: 9901
             }),
-            "The address is: Address {services: ServiceFlags(NETWORK_LIMITED), address: fd87:d87e:eb43::ffff:a00:1, port: 8333}"
+            "The address is: Address {services: ServiceFlags(NETWORK_LIMITED), address: fd87:d87e:eb43::ffff:a00:1, port: 9901}"
         );
     }
 
@@ -354,7 +354,7 @@ mod test {
     fn deserialize_address_test() {
         let mut addr: Result<Address, _> = deserialize(&[
             1u8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0x0a, 0, 0, 1,
-            0x20, 0x8d,
+            0x26, 0xad,
         ]);
         assert!(addr.is_ok());
         let full = addr.unwrap();
@@ -364,7 +364,7 @@ mod test {
         });
         assert_eq!(full.services, ServiceFlags::NETWORK);
         assert_eq!(full.address, [0, 0, 0, 0, 0, 0xffff, 0x0a00, 0x0001]);
-        assert_eq!(full.port, 8333);
+        assert_eq!(full.port, 9901);
 
         addr = deserialize(&[
             1u8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0x0a, 0, 0, 1,
@@ -536,7 +536,7 @@ mod test {
 
     #[test]
     fn addrv2message_test() {
-        let raw = hex!("0261bc6649019902abab208d79627683fd4804010409090909208d");
+        let raw = hex!("0261bc6649019902abab26ad79627683fd480401040909090926ad");
         let addresses: Vec<AddrV2Message> = deserialize(&raw).unwrap();
 
         assert_eq!(
@@ -545,7 +545,7 @@ mod test {
                 AddrV2Message {
                     services: ServiceFlags::NETWORK,
                     time: 0x4966bc61,
-                    port: 8333,
+                    port: 9901,
                     addr: AddrV2::Unknown(153, hex!("abab"))
                 },
                 AddrV2Message {
@@ -553,7 +553,7 @@ mod test {
                         | ServiceFlags::WITNESS
                         | ServiceFlags::COMPACT_FILTERS,
                     time: 0x83766279,
-                    port: 8333,
+                    port: 9901,
                     addr: AddrV2::Ipv4(Ipv4Addr::new(9, 9, 9, 9))
                 },
             ]
