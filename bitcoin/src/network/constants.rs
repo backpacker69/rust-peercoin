@@ -23,7 +23,7 @@
 //! let network = Network::Peercoin;
 //! let bytes = serialize(&network.magic());
 //!
-//! assert_eq!(&bytes[..], &[0xF9, 0xBE, 0xB4, 0xD9]);
+//! assert_eq!(&bytes[..], &[0xE6, 0xE8, 0xE9, 0xE5]);
 //! ```
 
 use core::borrow::{Borrow, BorrowMut};
@@ -86,7 +86,7 @@ impl Network {
     /// use peercoin::network::constants::{Network, Magic};
     /// use std::convert::TryFrom;
     ///
-    /// assert_eq!(Ok(Network::Peercoin), Network::try_from(Magic::from_bytes([0xF9, 0xBE, 0xB4, 0xD9])));
+    /// assert_eq!(Ok(Network::Peercoin), Network::try_from(Magic::from_bytes([0xE6, 0xE8, 0xE9, 0xE5])));
     /// assert_eq!(None, Network::from_magic(Magic::from_bytes([0xFF, 0xFF, 0xFF, 0xFF])));
     /// ```
     pub fn from_magic(magic: Magic) -> Option<Network> { Network::try_from(magic).ok() }
@@ -100,14 +100,14 @@ impl Network {
     /// use peercoin::network::constants::{Network, Magic};
     ///
     /// let network = Network::Peercoin;
-    /// assert_eq!(network.magic(), Magic::from_bytes([0xF9, 0xBE, 0xB4, 0xD9]));
+    /// assert_eq!(network.magic(), Magic::from_bytes([0xE6, 0xE8, 0xE9, 0xE5]));
     /// ```
     pub fn magic(self) -> Magic { Magic::from(self) }
 
-    /// Converts a `Network` to its equivalent `bitcoind -chain` argument name.
+    /// Converts a `Network` to its equivalent `peercoind -chain` argument name.
     ///
     /// ```bash
-    /// $ bitcoin-23.0/bin/bitcoind --help | grep -C 3 '\-chain=<chain>'
+    /// $ peercoin-0.13.0/bin/peercoind --help | grep -C 3 '\-chain=<chain>'
     /// Chain selection options:
     ///
     /// -chain=<chain>
@@ -122,10 +122,10 @@ impl Network {
         }
     }
 
-    /// Converts a `bitcoind -chain` argument name to its equivalent `Network`.
+    /// Converts a `peercoind -chain` argument name to its equivalent `Network`.
     ///
     /// ```bash
-    /// $ bitcoin-23.0/bin/bitcoind --help | grep -C 3 '\-chain=<chain>'
+    /// $ peercoin-0.13.0/bin/peercoind --help | grep -C 3 '\-chain=<chain>'
     /// Chain selection options:
     ///
     /// -chain=<chain>
@@ -153,7 +153,7 @@ impl Network {
     /// use peercoin::blockdata::constants::ChainHash;
     ///
     /// let network = Network::Peercoin;
-    /// assert_eq!(network.chain_hash(), ChainHash::BITCOIN);
+    /// assert_eq!(network.chain_hash(), ChainHash::PEERCOIN);
     /// ```
     pub fn chain_hash(self) -> ChainHash { ChainHash::using_genesis_block(self) }
 

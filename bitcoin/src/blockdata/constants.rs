@@ -110,11 +110,12 @@ pub fn genesis_block(network: Network) -> Block {
                     version: block::Version::ONE,
                     prev_blockhash: Hash::all_zeros(),
                     merkle_root,
-                    time: 1231006505,
+                    time: 1345084287,
                     bits: CompactTarget::from_consensus(0x1d00ffff),
-                    nonce: 2083236893
+                    nonce: 2179302059
                 },
                 txdata,
+                signature: Vec::new(),
             }
         }
         Network::Testnet => {
@@ -123,11 +124,12 @@ pub fn genesis_block(network: Network) -> Block {
                     version: block::Version::ONE,
                     prev_blockhash: Hash::all_zeros(),
                     merkle_root,
-                    time: 1296688602,
-                    bits: CompactTarget::from_consensus(0x1d00ffff),
-                    nonce: 414098458
+                    time: 1345090000,
+                    bits: CompactTarget::from_consensus(0x1d0fffff),
+                    nonce: 122894938
                 },
                 txdata,
+                signature: Vec::new(),
             }
         }
         Network::Signet => {
@@ -136,11 +138,12 @@ pub fn genesis_block(network: Network) -> Block {
                     version: block::Version::ONE,
                     prev_blockhash: Hash::all_zeros(),
                     merkle_root,
-                    time: 1598918400,
-                    bits: CompactTarget::from_consensus(0x1e0377ae),
-                    nonce: 52613770
+                    time: 1345090000,
+                    bits: CompactTarget::from_consensus(0x1d0fffff),
+                    nonce: 122894938
                 },
                 txdata,
+                signature: Vec::new(),
             }
         }
         Network::Regtest => {
@@ -149,11 +152,12 @@ pub fn genesis_block(network: Network) -> Block {
                     version: block::Version::ONE,
                     prev_blockhash: Hash::all_zeros(),
                     merkle_root,
-                    time: 1296688602,
-                    bits: CompactTarget::from_consensus(0x207fffff),
-                    nonce: 2
+                    time: 1345090000,
+                    bits: CompactTarget::from_consensus(0x1d0fffff),
+                    nonce: 122894938
                 },
                 txdata,
+                signature: Vec::new(),
             }
         }
     }
@@ -221,12 +225,12 @@ mod test {
 
         assert_eq!(gen.header.version, block::Version::ONE);
         assert_eq!(gen.header.prev_blockhash, Hash::all_zeros());
-        assert_eq!(gen.header.merkle_root.to_string(), "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b");
+        assert_eq!(gen.header.merkle_root.to_string(), "3c2d8f85fab4d17aac558cc648a1a58acff0de6deb890c29985690052c5993c2");
 
-        assert_eq!(gen.header.time, 1231006505);
+        assert_eq!(gen.header.time, 1345084287);
         assert_eq!(gen.header.bits, CompactTarget::from_consensus(0x1d00ffff));
-        assert_eq!(gen.header.nonce, 2083236893);
-        assert_eq!(gen.header.block_hash().to_string(), "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f");
+        assert_eq!(gen.header.nonce, 2179302059);
+        assert_eq!(gen.header.block_hash().to_string(), "0000000032fe677166d54963b62a4677d8957e87c508eaa4fd7eb1c880cd27e3");
     }
 
     #[test]
@@ -234,11 +238,11 @@ mod test {
         let gen = genesis_block(Network::Testnet);
         assert_eq!(gen.header.version, block::Version::ONE);
         assert_eq!(gen.header.prev_blockhash, Hash::all_zeros());
-        assert_eq!(gen.header.merkle_root.to_string(), "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b");
-        assert_eq!(gen.header.time, 1296688602);
-        assert_eq!(gen.header.bits, CompactTarget::from_consensus(0x1d00ffff));
-        assert_eq!(gen.header.nonce, 414098458);
-        assert_eq!(gen.header.block_hash().to_string(), "000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943");
+        assert_eq!(gen.header.merkle_root.to_string(), "3c2d8f85fab4d17aac558cc648a1a58acff0de6deb890c29985690052c5993c2");
+        assert_eq!(gen.header.time, 1345090000);
+        assert_eq!(gen.header.bits, CompactTarget::from_consensus(0x1d0fffff));
+        assert_eq!(gen.header.nonce, 122894938);
+        assert_eq!(gen.header.block_hash().to_string(), "00000001f757bb737f6596503e17cd17b0658ce630cc727c0cca81aec47c9f06");
     }
 
     #[test]
@@ -246,11 +250,11 @@ mod test {
         let gen = genesis_block(Network::Signet);
         assert_eq!(gen.header.version, block::Version::ONE);
         assert_eq!(gen.header.prev_blockhash, Hash::all_zeros());
-        assert_eq!(gen.header.merkle_root.to_string(), "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b");
-        assert_eq!(gen.header.time, 1598918400);
-        assert_eq!(gen.header.bits, CompactTarget::from_consensus(0x1e0377ae));
-        assert_eq!(gen.header.nonce, 52613770);
-        assert_eq!(gen.header.block_hash().to_string(), "00000008819873e925422c1ff0f99f7cc9bbb232af63a077a480a3633bee1ef6");
+        assert_eq!(gen.header.merkle_root.to_string(), "3c2d8f85fab4d17aac558cc648a1a58acff0de6deb890c29985690052c5993c2");
+        assert_eq!(gen.header.time, 1345090000);
+        assert_eq!(gen.header.bits, CompactTarget::from_consensus(0x1d0fffff));
+        assert_eq!(gen.header.nonce, 122894938);
+        assert_eq!(gen.header.block_hash().to_string(), "00000001f757bb737f6596503e17cd17b0658ce630cc727c0cca81aec47c9f06");
     }
 
     // The *_chain_hash tests are sanity/regression tests, they verify that the const byte array

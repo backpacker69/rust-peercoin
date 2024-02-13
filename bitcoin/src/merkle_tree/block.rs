@@ -13,18 +13,18 @@
 //! # Examples
 //!
 //! ```rust
-//! use bitcoin::hash_types::Txid;
-//! use bitcoin::hashes::hex::FromHex;
-//! use bitcoin::{Block, MerkleBlock};
+//! use peercoin::hash_types::Txid;
+//! use peercoin::hashes::hex::FromHex;
+//! use peercoin::{Block, MerkleBlock};
 //!
-//! // Get the proof from a bitcoind by running in the terminal:
-//! // $ TXID="5a4ebf66822b0b2d56bd9dc64ece0bc38ee7844a23ff1d7320a88c5fdb2ad3e2"
-//! // $ bitcoin-cli gettxoutproof [\"$TXID\"]
-//! let mb_bytes = Vec::from_hex("01000000ba8b9cda965dd8e536670f9ddec10e53aab14b20bacad27b913719\
-//!     0000000000190760b278fe7b8565fda3b968b918d5fd997f993b23674c0af3b6fde300b38f33a5914ce6ed5b\
-//!     1b01e32f570200000002252bf9d75c4f481ebb6278d708257d1f12beb6dd30301d26c623f789b2ba6fc0e2d3\
-//!     2adb5f8ca820731dff234a84e78ec30bce4ec69dbd562d0b2b8266bf4e5a0105").unwrap();
-//! let mb: MerkleBlock = bitcoin::consensus::deserialize(&mb_bytes).unwrap();
+//! // Get the proof from a peercoind by running in the terminal:
+//! // $ TXID="7ee4a78baa49b4d04650bf68c662444ffc36c8bc99d64554b39283bb94d993c7"
+//! // $ peercoin-cli gettxoutproof [\"$TXID\"]
+//! let mb_bytes = Vec::from_hex("040000009c71b80a67796200961fcba013874bfde9b7b49893621208cc39f7\
+//!     059b84f04dbdc571dd5832984353b3dd2f874bb908eb1053ddcd6342a1685300449fdc53ddb0e06965bd160c\
+//!     1c000000000300000002eda4d91a36927031b9bda9afad94ae0c4a68b2053c2bdfcae2a6b86716ae9368c793\
+//!     d994bb8392b35445d699bcc836fc4f4462c668bf5046d0b449aa8ba7e47e010d").unwrap();
+//! let mb: MerkleBlock = peercoin::consensus::deserialize(&mb_bytes).unwrap();
 //!
 //! // Authenticate and extract matched transaction ids
 //! let mut matches: Vec<Txid> = vec![];
@@ -32,11 +32,11 @@
 //! assert!(mb.extract_matches(&mut matches, &mut index).is_ok());
 //! assert_eq!(1, matches.len());
 //! assert_eq!(
-//!     "5a4ebf66822b0b2d56bd9dc64ece0bc38ee7844a23ff1d7320a88c5fdb2ad3e2".parse::<Txid>().unwrap(),
+//!     "7ee4a78baa49b4d04650bf68c662444ffc36c8bc99d64554b39283bb94d993c7".parse::<Txid>().unwrap(),
 //!     matches[0]
 //! );
 //! assert_eq!(1, index.len());
-//! assert_eq!(1, index[0]);
+//! assert_eq!(2, index[0]);
 //! ```
 
 use core::fmt;
@@ -72,25 +72,22 @@ impl MerkleBlock {
     /// # Examples
     ///
     /// ```rust
-    /// use bitcoin::hash_types::Txid;
-    /// use bitcoin::hashes::hex::FromHex;
-    /// use bitcoin::{Block, MerkleBlock};
+    /// use peercoin::hash_types::Txid;
+    /// use peercoin::hashes::hex::FromHex;
+    /// use peercoin::{Block, MerkleBlock};
     ///
-    /// // Block 80000
-    /// let block_bytes = Vec::from_hex("01000000ba8b9cda965dd8e536670f9ddec10e53aab14b20bacad2\
-    ///     7b9137190000000000190760b278fe7b8565fda3b968b918d5fd997f993b23674c0af3b6fde300b38f33\
-    ///     a5914ce6ed5b1b01e32f5702010000000100000000000000000000000000000000000000000000000000\
-    ///     00000000000000ffffffff0704e6ed5b1b014effffffff0100f2052a01000000434104b68a50eaa0287e\
-    ///     ff855189f949c1c6e5f58b37c88231373d8a59809cbae83059cc6469d65c665ccfd1cfeb75c6e8e19413\
-    ///     bba7fbff9bc762419a76d87b16086eac000000000100000001a6b97044d03da79c005b20ea9c0e1a6d9d\
-    ///     c12d9f7b91a5911c9030a439eed8f5000000004948304502206e21798a42fae0e854281abd38bacd1aee\
-    ///     d3ee3738d9e1446618c4571d1090db022100e2ac980643b0b82c0e88ffdfec6b64e3e6ba35e7ba5fdd7d\
-    ///     5d6cc8d25c6b241501ffffffff0100f2052a010000001976a914404371705fa9bd789a2fcd52d2c580b6\
-    ///     5d35549d88ac00000000").unwrap();
-    /// let block: Block = bitcoin::consensus::deserialize(&block_bytes).unwrap();
+    /// // Block 8000
+    /// let block_bytes = Vec::from_hex("01000000b2531bad1c8a6a9c7e3dbd23dee11c619fa8b88fa370d9\
+    ///     63d7e20200000000000ea7427e98d77a301352b3f76df8edf2b8b42c7ca9b339d869e18d249125cf182e\
+    ///     f769503a13071b09175c2401010000002ef7695001000000000000000000000000000000000000000000\
+    ///     0000000000000000000000ffffffff0e042ef769500177062f503253482fffffffff013037c03c000000\
+    ///     00232103e7a9210a61379fbc3394cd523427bd1e9ecbbcda64db4ec5aebf5e05ec21988aac0000000046\
+    ///     30440220559dd7e1303910f07745a1d4c084ac71d93ba473b6ed2519213adce03829afc20220107b5ade\
+    ///     5cd1c96419569302dc6b92e0619c4546c3923ff07d254c790f0bbeb7").unwrap();
+    /// let block: Block = peercoin::consensus::deserialize(&block_bytes).unwrap();
     ///
     /// // Create a merkle block containing a single transaction
-    /// let txid = "5a4ebf66822b0b2d56bd9dc64ece0bc38ee7844a23ff1d7320a88c5fdb2ad3e2".parse::<Txid>().unwrap();
+    /// let txid = "18cf2591248de169d839b3a97c2cb4b8f2edf86df7b35213307ad7987e42a70e".parse::<Txid>().unwrap();
     /// let match_txids: Vec<Txid> = vec![txid].into_iter().collect();
     /// let mb = MerkleBlock::from_block_with_predicate(&block, |t| match_txids.contains(t));
     ///
@@ -222,9 +219,9 @@ impl PartialMerkleTree {
     /// # Examples
     ///
     /// ```rust
-    /// use bitcoin::hash_types::Txid;
-    /// use bitcoin::hashes::hex::FromHex;
-    /// use bitcoin::merkle_tree::{MerkleBlock, PartialMerkleTree};
+    /// use peercoin::hash_types::Txid;
+    /// use peercoin::hashes::hex::FromHex;
+    /// use peercoin::merkle_tree::{MerkleBlock, PartialMerkleTree};
     ///
     /// // Block 80000
     /// let txids: Vec<Txid> = [
@@ -660,11 +657,11 @@ mod tests {
     #[test]
     fn merkleblock_serialization() {
         // Got it by running the rpc call
-        // `gettxoutproof '["220ebc64e21abece964927322cba69180ed853bb187fbc6923bac7d010b9d87a"]'`
+        // `gettxoutproof '["240b1d2f636e4e7320dbc5144e1329417dc57133ca89ac32f50c7593412e73b3"]'`
         let mb_hex = include_str!("../../tests/data/merkle_block.hex");
 
         let mb: MerkleBlock = deserialize(&hex!(mb_hex)).unwrap();
-        assert_eq!(get_block_13b8a().block_hash(), mb.header.block_hash());
+        assert_eq!(get_block_ac230b().block_hash(), mb.header.block_hash());
         assert_eq!(
             mb.header.merkle_root,
             mb.txn.extract_matches(&mut vec![], &mut vec![]).unwrap()
@@ -677,11 +674,11 @@ mod tests {
     /// given block.
     #[test]
     fn merkleblock_construct_from_txids_found() {
-        let block = get_block_13b8a();
+        let block = get_block_ac230b();
 
         let txids: Vec<Txid> = [
-            "74d681e0e03bafa802c8aa084379aa98d9fcd632ddc2ed9782b586ec87451f20",
-            "f9fc751cb7dc372406a9f8d738d5e6f8f63bab71986a39cf36ee70ee17036d07",
+            "240b1d2f636e4e7320dbc5144e1329417dc57133ca89ac32f50c7593412e73b3",
+            "280b5685dcbaf206967f4d1429d7c0b1a887a90f319601774f3124630d8b065a",
         ]
         .iter()
         .map(|hex| hex.parse::<Txid>().unwrap())
@@ -709,13 +706,13 @@ mod tests {
         assert_eq!(index[0], 1);
 
         assert_eq!(matches[1], txid1);
-        assert_eq!(index[1], 8);
+        assert_eq!(index[1], 5);
     }
 
     /// Create a CMerkleBlock using a list of txids which will not be found in the given block
     #[test]
     fn merkleblock_construct_from_txids_not_found() {
-        let block = get_block_13b8a();
+        let block = get_block_ac230b();
         let txids: Vec<Txid> = ["c0ffee00003bafa802c8aa084379aa98d9fcd632ddc2ed9782b586ec87451f20"]
             .iter()
             .map(|hex| hex.parse::<Txid>().unwrap())
@@ -749,11 +746,11 @@ mod tests {
         }
     }
 
-    /// Returns a real block (0000000000013b8ab2cd513b0261a14096412195a72a0c4827d229dcc7e0f7af)
-    /// with 9 txs.
-    fn get_block_13b8a() -> Block {
+    /// Returns a real block (ac230ba9f5e7f6a48c370caffed5ede04f65094afe44a2e79e5d7328d97d7e3b)
+    /// with 6 txs.
+    fn get_block_ac230b() -> Block {
         use crate::hashes::hex::FromHex;
-        let block_hex = include_str!("../../tests/data/block_13b8a.hex");
+        let block_hex = include_str!("../../tests/data/block_ac230ba9f5e7f6a48c370caffed5ede04f65094afe44a2e79e5d7328d97d7e3b.hex");
         deserialize(&Vec::from_hex(block_hex).unwrap()).unwrap()
     }
 }

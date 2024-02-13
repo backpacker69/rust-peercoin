@@ -663,15 +663,15 @@ impl NetworkValidation for NetworkUnchecked {
 /// use peercoin::address::{NetworkUnchecked, NetworkChecked};
 ///
 /// // variant 1
-/// let address: Address<NetworkUnchecked> = "32iVBEu4dxkUQk9dJbZUiBiQdmypcEyJRf".parse().unwrap();
+/// let address: Address<NetworkUnchecked> = "p77CZFn9jvg9waCzKBzkQfSvBBzPH1nRre".parse().unwrap();
 /// let address: Address<NetworkChecked> = address.require_network(Network::Peercoin).unwrap();
 ///
 /// // variant 2
-/// let address: Address = Address::from_str("32iVBEu4dxkUQk9dJbZUiBiQdmypcEyJRf").unwrap()
+/// let address: Address = Address::from_str("p77CZFn9jvg9waCzKBzkQfSvBBzPH1nRre").unwrap()
 ///                .require_network(Network::Peercoin).unwrap();
 ///
 /// // variant 3
-/// let address: Address<NetworkChecked> = "32iVBEu4dxkUQk9dJbZUiBiQdmypcEyJRf".parse::<Address<_>>()
+/// let address: Address<NetworkChecked> = "p77CZFn9jvg9waCzKBzkQfSvBBzPH1nRre".parse::<Address<_>>()
 ///                .unwrap().require_network(Network::Peercoin).unwrap();
 /// ```
 ///
@@ -685,15 +685,15 @@ impl NetworkValidation for NetworkUnchecked {
 /// ```
 /// # use std::str::FromStr;
 /// # use peercoin::address::{Address, NetworkChecked};
-/// let address: Address<NetworkChecked> = Address::from_str("132F25rTsvBdp9JzLLBHP5mvGY66i1xdiM")
+/// let address: Address<NetworkChecked> = Address::from_str("PBHWzHVWiAzYdApyVUj5UrJ8jenA7ojady")
 ///                .unwrap().assume_checked();
-/// assert_eq!(address.to_string(), "132F25rTsvBdp9JzLLBHP5mvGY66i1xdiM");
+/// assert_eq!(address.to_string(), "PBHWzHVWiAzYdApyVUj5UrJ8jenA7ojady");
 /// ```
 ///
 /// ```ignore
 /// # use std::str::FromStr;
 /// # use peercoin::address::{Address, NetworkChecked};
-/// let address: Address<NetworkUnchecked> = Address::from_str("132F25rTsvBdp9JzLLBHP5mvGY66i1xdiM")
+/// let address: Address<NetworkUnchecked> = Address::from_str("PBHWzHVWiAzYdApyVUj5UrJ8jenA7ojady")
 ///                .unwrap();
 /// let s = address.to_string(); // does not compile
 /// ```
@@ -705,17 +705,17 @@ impl NetworkValidation for NetworkUnchecked {
 /// ```
 /// # use std::str::FromStr;
 /// # use peercoin::address::{Address, NetworkUnchecked};
-/// let address: Address<NetworkUnchecked> = Address::from_str("132F25rTsvBdp9JzLLBHP5mvGY66i1xdiM")
+/// let address: Address<NetworkUnchecked> = Address::from_str("PBHWzHVWiAzYdApyVUj5UrJ8jenA7ojady")
 ///                .unwrap();
-/// assert_eq!(format!("{:?}", address), "Address<NetworkUnchecked>(132F25rTsvBdp9JzLLBHP5mvGY66i1xdiM)");
+/// assert_eq!(format!("{:?}", address), "Address<NetworkUnchecked>(PBHWzHVWiAzYdApyVUj5UrJ8jenA7ojady)");
 /// ```
 ///
 /// ```
 /// # use std::str::FromStr;
 /// # use peercoin::address::{Address, NetworkChecked};
-/// let address: Address<NetworkChecked> = Address::from_str("132F25rTsvBdp9JzLLBHP5mvGY66i1xdiM")
+/// let address: Address<NetworkChecked> = Address::from_str("PBHWzHVWiAzYdApyVUj5UrJ8jenA7ojady")
 ///                .unwrap().assume_checked();
-/// assert_eq!(format!("{:?}", address), "132F25rTsvBdp9JzLLBHP5mvGY66i1xdiM");
+/// assert_eq!(format!("{:?}", address), "PBHWzHVWiAzYdApyVUj5UrJ8jenA7ojady");
 /// ```
 ///
 /// ### Relevant BIPs
@@ -946,7 +946,7 @@ impl Address {
     /// If you want to avoid allocation you can use alternate display instead:
     /// ```
     /// # use core::fmt::Write;
-    /// # const ADDRESS: &str = "BC1QW508D6QEJXTDG4Y5R3ZARVARY0C5XW7KV8F3T4";
+    /// # const ADDRESS: &str = "PC1QAA6S4N0WZVYMX8E6F6RWCAYTQ5VQ0T7WPGQ5T8";
     /// # let address = ADDRESS.parse::<peercoin::Address<_>>().unwrap().assume_checked();
     /// # let mut writer = String::new();
     /// # // magic trick to make error handling look better
@@ -1016,7 +1016,7 @@ impl Address<NetworkUnchecked> {
     ///
     /// assert_eq!(address.is_valid_for_network(Network::Peercoin), false);
     ///
-    /// let address: Address<NetworkUnchecked> = "32iVBEu4dxkUQk9dJbZUiBiQdmypcEyJRf".parse().unwrap();
+    /// let address: Address<NetworkUnchecked> = "p77CZFn9jvg9waCzKBzkQfSvBBzPH1nRre".parse().unwrap();
     /// assert!(address.is_valid_for_network(Network::Peercoin));
     /// assert_eq!(address.is_valid_for_network(Network::Testnet), false);
     /// ```
@@ -1462,11 +1462,11 @@ mod tests {
         use serde_json;
 
         let addr =
-            Address::from_str("132F25rTsvBdp9JzLLBHP5mvGY66i1xdiM").unwrap().assume_checked();
+            Address::from_str("PBHWzHVWiAzYdApyVUj5UrJ8jenA7ojady").unwrap().assume_checked();
         let json = serde_json::to_value(&addr).unwrap();
         assert_eq!(
             json,
-            serde_json::Value::String("132F25rTsvBdp9JzLLBHP5mvGY66i1xdiM".to_owned())
+            serde_json::Value::String("PBHWzHVWiAzYdApyVUj5UrJ8jenA7ojady".to_owned())
         );
         let into: Address = serde_json::from_value::<Address<_>>(json).unwrap().assume_checked();
         assert_eq!(addr.to_string(), into.to_string());

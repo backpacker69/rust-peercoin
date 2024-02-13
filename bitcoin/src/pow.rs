@@ -352,7 +352,7 @@ impl U256 {
     ///
     /// 2**256 / (x + 1) == ~x / (x + 1) + 1
     ///
-    /// (Equation shamelessly stolen from bitcoind)
+    /// (Equation shamelessly stolen from peercoind)
     fn inverse(&self) -> U256 {
         // We should never have a target/work of zero so this doesn't matter
         // that much but we define the inverse of 0 as max.

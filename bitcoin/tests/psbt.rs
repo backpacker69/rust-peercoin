@@ -138,11 +138,11 @@ fn build_extended_private_key() -> ExtendedPrivKey {
 fn create_transaction() -> Transaction {
     // Strings from BIP 174 test vector.
     let output_0 = TvOutput {
-        amount: "1.49990000",
+        amount: "149.9900",
         script_pubkey: "0014d85c2b71d0060b09c9886aeb815e50991dda124d",
     };
     let output_1 = TvOutput {
-        amount: "1.00000000",
+        amount: "100.0000",
         script_pubkey: "001400aea9a2e5f0f876a588df5546e8742d1d87008f",
     };
     let input_0 = TvInput {
@@ -163,7 +163,7 @@ fn create_transaction() -> Transaction {
     }
 
     Transaction {
-        version: 2,
+        version: 3,
         timestamp: 0,
         lock_time: absolute::LockTime::ZERO,
         input: vec![
@@ -188,14 +188,14 @@ fn create_transaction() -> Transaction {
         ],
         output: vec![
             TxOut {
-                value: Amount::from_str_in(output_0.amount, Denomination::Bitcoin)
+                value: Amount::from_str_in(output_0.amount, Denomination::Peercoin)
                     .expect("failed to parse amount")
                     .to_sat(),
                 script_pubkey: ScriptBuf::from_hex(output_0.script_pubkey)
                     .expect("failed to parse script"),
             },
             TxOut {
-                value: Amount::from_str_in(output_1.amount, Denomination::Bitcoin)
+                value: Amount::from_str_in(output_1.amount, Denomination::Peercoin)
                     .expect("failed to parse amount")
                     .to_sat(),
                 script_pubkey: ScriptBuf::from_hex(output_1.script_pubkey)

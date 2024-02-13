@@ -1,14 +1,14 @@
-extern crate bitcoin;
+extern crate peercoin;
 
 use std::io::{BufReader, Write};
 use std::net::{IpAddr, Ipv4Addr, Shutdown, SocketAddr, TcpStream};
 use std::time::{SystemTime, UNIX_EPOCH};
 use std::{env, process};
 
-use bitcoin::consensus::{encode, Decodable};
-use bitcoin::network::{address, constants, message, message_network};
-use bitcoin::secp256k1;
-use bitcoin::secp256k1::rand::Rng;
+use peercoin::consensus::{encode, Decodable};
+use peercoin::network::{address, constants, message, message_network};
+use peercoin::secp256k1;
+use peercoin::secp256k1::rand::Rng;
 
 fn main() {
     // This example establishes a connection to a Bitcoin node, sends the intial

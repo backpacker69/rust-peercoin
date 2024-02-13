@@ -1,19 +1,19 @@
 // Written in 2014 by Andrew Poelstra <apoelstra@wpsoftware.net>
 // SPDX-License-Identifier: CC0-1.0
 
-//! Bitcoin scripts.
+//! Peercoin scripts.
 //!
 //! *[See also the `Script` type](Script).*
 //!
 //! This module provides the structures and functions needed to support scripts.
 //!
 //! <details>
-//! <summary>What is Bitcoin script</summary>
+//! <summary>What is Peercoin script</summary>
 //!
-//! Scripts define Bitcoin's digital signature scheme: a signature is formed
+//! Scripts define Peercoin's digital signature scheme: a signature is formed
 //! from a script (the second half of which is defined by a coin to be spent,
 //! and the first half provided by the spending transaction), and is valid iff
-//! the script leaves `TRUE` on the stack after being evaluated. Bitcoin's
+//! the script leaves `TRUE` on the stack after being evaluated. Peercoin's
 //! script is a stack-based assembly language similar in spirit to [Forth].
 //!
 //! Script is represented as a sequence of bytes on the wire, each byte representing an operation,
@@ -29,7 +29,7 @@
 //! In this library we chose to keep the byte representation in memory and decode opcodes only when
 //! processing the script. This is similar to Rust choosing to represent strings as UTF-8-encoded
 //! bytes rather than slice of `char`s. In both cases the individual items can have different sizes
-//! and forcing them to be larger would waste memory and, in case of Bitcoin script, even some
+//! and forcing them to be larger would waste memory and, in case of Peercoin script, even some
 //! performance (forcing allocations).
 //!
 //! ## `Script` vs `ScriptBuf` vs `Builder`
@@ -85,7 +85,7 @@ pub use self::push_bytes::*;
 /// Writes bytes into the buffer and returns the number of bytes written.
 ///
 /// Note that `write_scriptint`/`read_scriptint` do not roundtrip if the value written requires
-/// more than 4 bytes, this is in line with Bitcoin Core (see [`CScriptNum::serialize`]).
+/// more than 4 bytes, this is in line with Peercoin (see [`CScriptNum::serialize`]).
 ///
 /// [`CScriptNum::serialize`]: <https://github.com/bitcoin/bitcoin/blob/8ae2808a4354e8dcc697f76bacc5e2f2befe9220/src/script/script.h#L345>
 pub fn write_scriptint(out: &mut [u8; 8], n: i64) -> usize {
@@ -120,7 +120,7 @@ pub fn write_scriptint(out: &mut [u8; 8], n: i64) -> usize {
 /// Decodes an integer in script(minimal CScriptNum) format.
 ///
 /// Notice that this fails on overflow: the result is the same as in
-/// bitcoind, that only 4-byte signed-magnitude values may be read as
+/// peercoind, that only 4-byte signed-magnitude values may be read as
 /// numbers. They can be added or subtracted (and a long time ago,
 /// multiplied and divided), and this may result in numbers which
 /// can't be written out in 4 bytes or less. This is ok! The number
@@ -133,7 +133,7 @@ pub fn write_scriptint(out: &mut [u8; 8], n: i64) -> usize {
 /// simply say, anything in excess of 32 bits is no longer a number.
 /// This is basically a ranged type implementation.
 ///
-/// This code is based on the `CScriptNum` constructor in Bitcoin Core (see `script.h`).
+/// This code is based on the `CScriptNum` constructor in Peercoin (see `script.h`).
 pub fn read_scriptint(v: &[u8]) -> Result<i64, Error> {
     let len = v.len();
     if len > 4 { return Err(Error::NumericOverflow); }
@@ -191,7 +191,7 @@ pub fn read_scriptbool(v: &[u8]) -> bool {
 /// Note that this does **not** return an error for `size` between `core::size_of::<usize>()`
 /// and `u16::max_value / 8` if there's no overflow.
 #[inline]
-#[deprecated(since = "0.30.0", note = "bitcoin integers are signed 32 bits, use read_scriptint")]
+#[deprecated(since = "0.30.0", note = "peercoin integers are signed 32 bits, use read_scriptint")]
 pub fn read_uint(data: &[u8], size: usize) -> Result<usize, Error> {
     read_uint_iter(&mut data.iter(), size).map_err(Into::into)
 }
